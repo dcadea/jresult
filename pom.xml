@@ -6,11 +6,30 @@
 
     <groupId>io.github.dcadea</groupId>
     <artifactId>jresult</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
+
+    <name>jResult</name>
+    <scm>
+        <connection>scm:git:git://github.com:dcadea/jresult.git</connection>
+        <developerConnection>scm:git:git@github.com:dcadea/jresult.git</developerConnection>
+        <url>https://github.com/dcadea/jresult</url>
+        <tag>HEAD</tag>
+    </scm>
+    <issueManagement>
+        <url>https://github.com/dcadea/jresult/issues</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <id>dcadea</id>
+            <email>dmitrii.cadea@gmail.com</email>
+            <url>https://github.com/dcadea</url>
+        </developer>
+    </developers>
 
     <properties>
-        <maven.compiler.source>23</maven.compiler.source>
-        <maven.compiler.target>23</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
