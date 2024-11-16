@@ -39,7 +39,7 @@ public class ResultAssertions<O, E> extends AbstractAssert<ResultAssertions<O, E
         if (!actual.isOkAnd(v -> v.equals(expected))) {
             try {
                 failWithMessage("Expected result to have value <%s>, but was <%s>", expected, actual.unwrap());
-            } catch (IllegalStateException e) {
+            } catch (IllegalStateException _) {
                 failWithMessage("Expected result to have value, but was <%s>".formatted(actual));
             }
         }
@@ -50,7 +50,7 @@ public class ResultAssertions<O, E> extends AbstractAssert<ResultAssertions<O, E
         if (!actual.isErrAnd(e -> e.equals(expected))) {
             try {
                 failWithMessage("Expected result to have error <%s>, but was <%s>", expected, actual.unwrapErr());
-            } catch (IllegalStateException e) {
+            } catch (IllegalStateException _) {
                 failWithMessage("Expected result to have error, but was <%s>".formatted(actual));
             }
         }
