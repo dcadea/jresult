@@ -13,13 +13,6 @@ public class ResultAssertions<O, E> extends AbstractAssert<ResultAssertions<O, E
         return new ResultAssertions<>(actual);
     }
 
-    public void isEmpty() {
-        isNotNull();
-        if (!actual.isEmpty()) {
-            failWithMessage("Expected result to be empty, but was not");
-        }
-    }
-
     public void isOk() {
         isNotNull();
         if (!actual.isOk()) {

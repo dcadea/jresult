@@ -24,7 +24,7 @@ public record Err<O, E>(E error) implements Result<O, E> {
      * @throws NullPointerException if the error is null.
      */
     public Err {
-        requireNonNull(error, "Error cannot be null");
+        requireNonNull(error, "Error cannot contain null");
     }
 
 }

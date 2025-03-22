@@ -11,15 +11,19 @@ import static io.github.dcadea.jresult.external.assertj.ResultAssertions.assertT
 class ResultTest {
 
     @Test
-    void shouldReturnEmptyWhenCreatingEmptyResult() {
-        var result = Result.empty();
-        assertThat(result).isEmpty();
+    void shouldThrowNullPointerExceptionWhenOkOfNull() {
+        Assertions.assertThatNullPointerException()
+                .isThrownBy(() -> {
+                    var _ = Result.ok(null);
+                });
     }
 
     @Test
-    void shouldReturnEmptyWhenNullValue() {
-        var result = Result.ok(null);
-        assertThat(result).isEmpty();
+    void shouldThrowNullPointerExceptionWhenErrOfNull() {
+        Assertions.assertThatNullPointerException()
+                .isThrownBy(() -> {
+                    var _ = Result.err(null);
+                });
     }
 
     @Test
@@ -32,30 +36,6 @@ class ResultTest {
     void shouldReturnErrWhenCreatingErrResult() {
         var result = Result.err(new Kaboom("something went wrong"));
         assertThat(result).hasError(new Kaboom("something went wrong"));
-    }
-
-    @Test
-    void shouldReturnTrueWhenResultIsEmpty() {
-        var result = Result.empty();
-        Assertions.assertThat(result.isEmpty()).isTrue();
-    }
-
-    @Test
-    void shouldReturnTrueWhenResultIsEmptyFromNullValue() {
-        var result = Result.ok(null);
-        Assertions.assertThat(result.isEmpty()).isTrue();
-    }
-
-    @Test
-    void shouldReturnFalseOnIsEmptyWhenResultHasValue() {
-        var result = Result.ok(5);
-        Assertions.assertThat(result.isEmpty()).isFalse();
-    }
-
-    @Test
-    void shouldReturnFalseOnIsEmptyWhenResultIsErr() {
-        var result = Result.err(new Boom(10));
-        Assertions.assertThat(result.isEmpty()).isFalse();
     }
 
     @Test
@@ -119,18 +99,6 @@ class ResultTest {
     }
 
     @Test
-    void shouldReturnOptionalEmptyOnOkWhenResultIsEmpty() {
-        var result = Result.empty();
-        Assertions.assertThat(result.ok()).isEmpty();
-    }
-
-    @Test
-    void shouldReturnOptionalEmptyOnOkWhenResultIsEmptyFromNullValue() {
-        var result = Result.ok(null);
-        Assertions.assertThat(result.ok()).isEmpty();
-    }
-
-    @Test
     void shouldReturnOptionalContainingValueOnOkWhenResultIsOk() {
         var result = Result.ok(5);
         Assertions.assertThat(result.ok()).contains(5);
@@ -140,18 +108,6 @@ class ResultTest {
     void shouldReturnOptionalEmptyOnOkWhenResultIsErr() {
         var result = Result.err("error");
         Assertions.assertThat(result.ok()).isEmpty();
-    }
-
-    @Test
-    void shouldReturnOptionalEmptyOnErrWhenResultIsEmpty() {
-        var result = Result.empty();
-        Assertions.assertThat(result.err()).isEmpty();
-    }
-
-    @Test
-    void shouldReturnOptionalEmptyOnErrWhenResultIsEmptyFromNullValue() {
-        var result = Result.ok(null);
-        Assertions.assertThat(result.err()).isEmpty();
     }
 
     @Test
@@ -237,7 +193,7 @@ class ResultTest {
     }
 
     @Test
-    void shouldNotInspectionWhenResultIsErr() {
+    void shouldNotInspectWhenResultIsErr() {
         Result<Mutable, Crash> result = Result.err(new Crash(1.0f));
         var list = new ArrayList<Integer>();
 

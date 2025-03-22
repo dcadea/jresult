@@ -77,19 +77,6 @@ import java.util.function.*;
 public sealed interface Result<O, E> permits Ok, Err {
 
     /**
-     * Empty result.
-     * <p>Useful for "void" operations to signal success.</p>
-     *
-     * @param <O> Type of success value.
-     * @param <E> Type of error value.
-     * @return Empty Ok result.
-     */
-    @SuppressWarnings("unchecked")
-    static <O, E> Result<O, E> empty() {
-        return (Ok<O, E>) Ok.EMPTY;
-    }
-
-    /**
      * Create a result with a success value.
      *
      * @param value Success value.
@@ -98,10 +85,6 @@ public sealed interface Result<O, E> permits Ok, Err {
      * @return Ok result.
      */
     static <O, E> Result<O, E> ok(O value) {
-        if (value == null) {
-            return empty();
-        }
-
         return new Ok<>(value);
     }
 
@@ -116,30 +99,6 @@ public sealed interface Result<O, E> permits Ok, Err {
      */
     static <O, E> Result<O, E> err(E error) {
         return new Err<>(error);
-    }
-
-    /**
-     * Check if the result is empty.
-     * <p>
-     * Examples:
-     * <pre>{@code
-     * var res = Result.empty();
-     * assertThat(res.isEmpty()).isTrue();
-     *
-     * var res = Result.ok(null);
-     * assertThat(res.isEmpty()).isTrue();
-     *
-     * var res = Result.ok(5);
-     * assertThat(res.isEmpty()).isFalse();
-     *
-     * Result<Integer, String> res = Result.err("error");
-     * assertThat(res.isEmpty()).isFalse();
-     * }</pre>
-     *
-     * @return {@code true} if the result is empty, {@code false} otherwise.
-     */
-    default boolean isEmpty() {
-        return this == Ok.EMPTY;
     }
 
     /**
@@ -242,7 +201,7 @@ public sealed interface Result<O, E> permits Ok, Err {
      */
     default Optional<O> ok() {
         return switch (this) {
-            case Ok(O value) -> Optional.ofNullable(value);
+            case Ok(O value) -> Optional.of(value);
             case Err(_) -> Optional.empty();
         };
     }

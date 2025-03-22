@@ -1,5 +1,7 @@
 package io.github.dcadea.jresult;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Ok represents the success branch of the {@link Result} type.
  * It contains the success value and never an error value.
@@ -14,5 +16,13 @@ package io.github.dcadea.jresult;
  * @since 0.1.0
  */
 public record Ok<O, E>(O value) implements Result<O, E> {
-    static Ok<?, ?> EMPTY = new Ok<>(null);
+    /**
+     * Creates an ok variant of result.
+     *
+     * @param value Success value.
+     * @throws NullPointerException if the value is null.
+     */
+    public Ok {
+        requireNonNull(value, "Ok cannot contain null");
+    }
 }
