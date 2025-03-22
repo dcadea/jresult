@@ -557,19 +557,19 @@ public sealed interface Result<O, E> permits Ok, Err {
      * Example:
      * <pre>{@code
      * var res = Result.ok(5);
-     * assertThat(res.andThen(() -> Result.ok(10))).hasValue(10);
+     * assertThat(res.andThen(v -> Result.ok(v + 10))).hasValue(15);
      *
      * Result<Integer, String> res = Result.err("error");
-     * assertThat(res.andThen(() -> Result.ok(10))).hasError("error");
+     * assertThat(res.andThen(v -> Result.ok(v + 10))).hasError("error");
      * }</pre>
      *
-     * @param op   Operation to return if current result is Ok.
+     * @param op   Operation result to return if current result is Ok.
      * @param <NO> New success value type.
      * @return Operation result if the result is Ok, otherwise return current error result.
      */
-    default <NO> Result<NO, E> andThen(Supplier<? extends Result<NO, E>> op) {
+    default <NO> Result<NO, E> andThen(Function<? super O, ? extends Result<NO, E>> op) {
         return switch (this) {
-            case Ok(_) -> op.get();
+            case Ok(O value) -> op.apply(value);
             case Err(E error) -> err(error);
         };
     }
@@ -611,20 +611,20 @@ public sealed interface Result<O, E> permits Ok, Err {
      * Example:
      * <pre>{@code
      * var res = Result.ok(5);
-     * assertThat(res.orElse(() -> Result.ok(10))).hasValue(5);
+     * assertThat(res.orElse(e -> Result.ok(10))).hasValue(5);
      *
      * Result<Integer, String> res = Result.err("error");
-     * assertThat(res.orElse(() -> Result.ok(10))).hasValue(10);
+     * assertThat(res.orElse(e -> Result.ok(10))).hasValue(10);
      * }</pre>
      *
-     * @param op   Operation to return if current result is Err.
+     * @param op   Operation result to return if current result is Err.
      * @param <NE> New error value type.
      * @return Operation result if the result is Err, otherwise return current success result.
      */
-    default <NE> Result<O, NE> orElse(Supplier<? extends Result<O, NE>> op) {
+    default <NE> Result<O, NE> orElse(Function<? super E, ? extends Result<O, NE>> op) {
         return switch (this) {
             case Ok(O value) -> ok(value);
-            case Err(_) -> op.get();
+            case Err(E error) -> op.apply(error);
         };
     }
 }

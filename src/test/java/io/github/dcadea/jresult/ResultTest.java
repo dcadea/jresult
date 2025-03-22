@@ -359,7 +359,7 @@ class ResultTest {
         Result<Integer, String> ok = Result.ok(5);
         Result<Mutable, String> err = Result.err("error");
 
-        assertThat(ok.andThen(() -> err)).hasError("error");
+        assertThat(ok.andThen(v -> err)).hasError("error");
     }
 
     @Test
@@ -367,7 +367,7 @@ class ResultTest {
         Result<Mutable, TestError> err = Result.err(new Boom(7));
         Result<Integer, TestError> ok = Result.ok(5);
 
-        assertThat(err.andThen(() -> ok)).hasError(new Boom(7));
+        assertThat(err.andThen(v -> ok)).hasError(new Boom(7));
     }
 
     @Test
@@ -375,7 +375,7 @@ class ResultTest {
         Result<Integer, String> err1 = Result.err("error1");
         Result<Mutable, String> err2 = Result.err("error2");
 
-        assertThat(err1.andThen(() -> err2)).hasError("error1");
+        assertThat(err1.andThen(v -> err2)).hasError("error1");
     }
 
     @Test
@@ -383,7 +383,16 @@ class ResultTest {
         Result<Integer, TestError> ok1 = Result.ok(5);
         Result<Mutable, TestError> ok2 = Result.ok(new Mutable(10));
 
-        assertThat(ok1.andThen(() -> ok2)).hasValue(new Mutable(10));
+        assertThat(ok1.andThen(v -> ok2)).hasValue(new Mutable(10));
+    }
+
+    @Test
+    void shouldReturnMappedOkOnAndThenWhenBothAreOk() {
+        Result<Integer, TestError> ok = Result.ok(5);
+
+        Result<Mutable, TestError> actual = ok.andThen(v -> Result.ok(new Mutable(v)));
+
+        assertThat(actual).hasValue(new Mutable(5));
     }
 
     @Test
@@ -423,7 +432,7 @@ class ResultTest {
         Result<Integer, TestError> ok = Result.ok(5);
         Result<Integer, String> err = Result.err("error");
 
-        assertThat(ok.orElse(() -> err)).hasValue(5);
+        assertThat(ok.orElse(e -> err)).hasValue(5);
     }
 
     @Test
@@ -431,7 +440,7 @@ class ResultTest {
         Result<Integer, Boom> err = Result.err(new Boom(7));
         Result<Integer, Kaboom> ok = Result.ok(5);
 
-        assertThat(err.orElse(() -> ok)).hasValue(5);
+        assertThat(err.orElse(e -> ok)).hasValue(5);
     }
 
     @Test
@@ -439,7 +448,16 @@ class ResultTest {
         Result<Mutable, Crash> err1 = Result.err(new Crash(3.14f));
         Result<Mutable, Boom> err2 = Result.err(new Boom(2));
 
-        assertThat(err1.orElse(() -> err2)).hasError(new Boom(2));
+        assertThat(err1.orElse(e -> err2)).hasError(new Boom(2));
+    }
+
+    @Test
+    void shouldReturnMappedErrOnOrElseWhenAllAreErr() {
+        Result<Mutable, Boom> err = Result.err(new Boom(2));
+
+        Result<Mutable, Crash> actual = err.orElse(e -> Result.err(new Crash(e.radius())));
+
+        assertThat(actual).hasError(new Crash(2));
     }
 
     @Test
@@ -447,7 +465,7 @@ class ResultTest {
         Result<Integer, String> ok1 = Result.ok(5);
         Result<Integer, TestError> ok2 = Result.ok(10);
 
-        assertThat(ok1.orElse(() -> ok2)).hasValue(5);
+        assertThat(ok1.orElse(e -> ok2)).hasValue(5);
     }
 }
 
